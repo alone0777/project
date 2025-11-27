@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pending Applications</title>
+</head>
+<body>
+    <h2>Pending Applications</h2>
+    <p><a href="{{ url_for('admin.dashboard') }}">Back to Dashboard</a> | <a href="{{ url_for('admin.logout') }}">Logout</a></p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Field of Expertise</th>
+            <th>Bio</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.id }}</td>
+            <td>{{ app.username }}</td>
+            <td>{{ app.field_of_expertise or '' }}</td>
+            <td>{{ app.bio or '' }}</td>
+            <td>{{ app.status }}</td>
+            <td>
+                <a href="{{ url_for('admin.approve', app_id=app.id) }}">Approve</a> |
+                <a href="{{ url_for('admin.delete', app_id=app.id) }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

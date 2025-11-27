@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h2>Admin Dashboard</h2>
+    <p><a href="{{ url_for('admin.logout') }}">Logout</a></p>
+
+    <h3>Dashboard Counts:</h3>
+    <ul>
+        {% for key, value in counts.items() %}
+            <li>{{ key }}: {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{{ url_for('admin.view_applications') }}">View Pending Applications</a></p>
+</body>
+</html>

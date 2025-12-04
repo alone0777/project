@@ -19,9 +19,7 @@
         <tr>
             <th>ID</th>
             <th>Username</th>
-            <th>Field of Expertise</th>
-            <th>Bio</th>
-            <th>Status</th>
+            <th>Field of Expertise</th> 
             <th>Actions</th>
         </tr>
         {% for app in applications %}
@@ -29,8 +27,6 @@
             <td>{{ app.id }}</td>
             <td>{{ app.username }}</td>
             <td>{{ app.field_of_expertise or '' }}</td>
-            <td>{{ app.bio or '' }}</td>
-            <td>{{ app.status }}</td>
             <td>
                 <a href="{{ url_for('admin.approve', app_id=app.id) }}">Approve</a> |
                 <a href="{{ url_for('admin.delete', app_id=app.id) }}">Delete</a>

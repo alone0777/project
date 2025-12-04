@@ -72,21 +72,14 @@ def approve_application(app_id):
     cursor = connection.cursor()
 
     # Fetch username from application
-    cursor.execute("SELECT username FROM applications WHERE id=%s", (app_id,))
+    cursor.execute("SELECT username FROM applications WHERE id=%s", (app_id))
     result = cursor.fetchone()
 
     if result:
-        username = result[0]
+        username = result['username']
 
         # Update application status
-        cursor.execute("UPDATE applications SET status='approved' WHERE id=%s", (app_id,))
-
-        # Change user role to mentor
-        cursor.execute("UPDATE users SET role='mentor' WHERE username=%s", (username,))
-
-        # Create mentor profile entry
-        sql = "INSERT INTO mentor_profiles (user_id) SELECT id FROM users WHERE username=%s"
-        cursor.execute(sql, (username,))
+        cursor.execute("UPDATE applications SET status='approved' WHERE id=%s", (app_id))
 
         connection.commit()
 

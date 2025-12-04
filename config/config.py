@@ -47,16 +47,28 @@ def create_default_admin(app, db): # Create a default admin user if not exists
             db.session.add(admin_user)
             db.session.commit()
 
-def add_user(username, password, role):
+def add_user(username, password, role, name, interests):
     from config.model import User
     new_user = User(username=username, password=password, role=role)
     db.session.add(new_user)
     db.session.commit()
-    if role == 'mentor':
+    if role == 'mentee':
+        print("Creating mentee profile")
+        from config.model import MenteeProfile
+        mentee_profile = MenteeProfile(user_id=new_user.id, name=name, interests=interests)
+        db.session.add(mentee_profile)
+        db.session.commit()
+    elif role == 'mentor':
         print("Creating mentor profile")
         from config.model import MentorProfile, Application
-        mentor_profile = MentorProfile(user_id=new_user.id)
-        application = Application(user_id=new_user.id, username=username)
+        mentor_profile = MentorProfile(user_id=new_user.id, name=name, field_of_expertise=interests)
+        application = Application(user_id=new_user.id, username=username, field_of_expertise=interests, status='pending')
         db.session.add(application)
         db.session.add(mentor_profile)
         db.session.commit()
+def approved(mentor_id):
+    from config.model import Application
+    application = Application.query.filter_by(user_id=mentor_id).first()
+    if application and application.status == 'approved':
+        return True
+    return False

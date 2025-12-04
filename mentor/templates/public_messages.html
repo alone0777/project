@@ -1,0 +1,39 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Public Messages</title>
+</head>
+<body>  
+    <h2>All Messages from selected expertise </h2>
+    <div>
+        <form action = "/mentor/public_messages" method="get">
+            <label for="expertise">Select Expertise:</label>
+            <select name="expertise" id="expertise" required>
+                {% for item in expertises %}
+                <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Refresh Messages">
+        </form>
+        <div>
+        {% for message in messages %}
+            <div>
+                <p><strong>Username:</strong> {{ message.username }}</p>
+                <p>{{ message.content }}</p>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <h2>Send a New Public Message</h2>
+    <div>
+        <form action="/mentor/send_message" method="POST">
+            <label for="content">Message:</label><br>
+            <textarea id="content" name="content" rows="4" cols="50" required></textarea><br><br>
+            <input type="submit" value="Send Message">
+
+        </form>
+    </div>
+</body>
+</html>

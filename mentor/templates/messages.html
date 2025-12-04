@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">    
+<head>
+    <meta charset="UTF-8">
+    <title>Public Messages</title>
+</head>
+<body>
+    <h1>Public Messages</h1>
+    <hr>
+    <h2>All Public Messages</h2>
+    <div>
+        {% for message in messages %}
+            <div>
+                <p>{{ message.content }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <div>
+        <form action = "{{ url_for('mentor.public_messages') }}" method="get">
+            <label for="expertise">Select Expertise:</label>
+            <select name="expertise" id="expertise" required>
+                {% for item in expertises %}
+                <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Refresh Messages">
+        </form>
+    </div>  
+</body>         
+</html>

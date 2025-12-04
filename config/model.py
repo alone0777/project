@@ -17,7 +17,6 @@ class Application(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) #foreign key to users table
     username = db.Column(db.String(100), nullable=False)  # applicant username
     field_of_expertise = db.Column(db.String(255), nullable=True) #nullabe used here these filed can have empty value
-    bio = db.Column(db.Text, nullable=True)
     status = db.Column(db.Enum('pending','approved','rejected'), default='pending')
 
 
@@ -28,7 +27,6 @@ class MentorProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Auto-increment
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     field_of_expertise = db.Column(db.String(255), nullable=True)
-    bio = db.Column(db.Text, nullable=True)
     name = db.Column(db.String(255), nullable=True)
 
 
@@ -43,11 +41,11 @@ class MenteeProfile(db.Model):
 
 
 # --- Messages ---
-class Message(db.Model):
-    __tablename__ = 'messages'
+class PublicMessages(db.Model):
+    __tablename__ = 'public_messages'
     
     id = db.Column(db.Integer, primary_key=True)  # Auto-increment
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)  # None for public messages
-    type = db.Column(db.Enum('public','private'), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    interest = db.Column(db.String(255), nullable=True) 
+

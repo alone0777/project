@@ -1,0 +1,29 @@
+<!DOCTYPE html> 
+<html lang="en"> </html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mentee Public Messages</title>
+</head>
+<body>
+    <h1>Public Messages for Mentees</h1>
+    <div>
+        <ul>
+            {% for message in messages %}
+                <li>{{ message.content | safe }}</li>
+            {% endfor %}
+        </ul>
+    </div>  
+    <h2>Send a New Public Message</h2>                    
+    <form action="/mentee/send_message" method="POST">  
+        <label for="message">New Message:</label>
+        <input type="text" id="message" name="message" required><br><br>
+        <label for="Interest">Interest:</label>
+        <input type="text" id="Interest" name="Interest" required><br><br>
+        <input type="submit" value="Send Message">
+    </form>
+    <div>   
+        <a href="/mentee/profile">Go to Mentee Profile</a>
+        <a href="/mentee/logout">Logout</a>
+    </div>
+</body>
+</html>     

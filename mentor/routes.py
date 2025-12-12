@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash    
-from mentor.logic import ( send_public_message, get_public_messages, get_mentor_profile)    
+from mentor.logic import ( send_public_message, get_public_messages, get_mentor_profile)
+form config.config import sanitize_input    
 mentor_bp = Blueprint(
     'mentor',
     __name__,
@@ -40,7 +41,7 @@ def send_message():
         return redirect(url_for('access_denied'))
     if request.method == 'POST':
         mentor_id = session.get('mentor_id')  # Assuming mentee_id is stored in session
-        content = request.form.get('content')
+        content = sanitize_input(request.form.get('content')) #  input sanitation
         expertise=session.get('mentor_expertise_chosen')
         send_public_message(mentor_id, content,expertise)
     return redirect(url_for('mentor.messages'),from_redirect=1)

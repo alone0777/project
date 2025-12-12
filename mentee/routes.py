@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from mentee.logic import ( send_public_message, display_public_messages, get_mentee_profile)    
+from mentee.logic import ( send_public_message, display_public_messages, get_mentee_profile)
+from config.config import sanitize_input    
 mentee_bp = Blueprint(
     'mentee',
     __name__,
@@ -23,8 +24,8 @@ def send_message():
         print("Sending message")
         mentee_id = session.get('mentee_id')  # Assuming mentee_id is stored in session
         print("Mentee ID:", mentee_id)
-        content = request.form.get('message')
-        interest = request.form.get('Interest')
+        content = sanitize_input(request.form.get('message')) # Sanitize input
+        interest = sanitize_input(request.form.get('Interest')) # Sanitize input
         send_public_message(mentee_id, content,interest)
     return redirect(url_for('mentee.public_messages'))
     

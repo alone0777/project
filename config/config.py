@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import pymysql 
 import os 
+import bleach 
 
 def start_mysql_server():
     # Function to start MySQL server if needed
@@ -72,3 +73,8 @@ def approved(mentor_id):
     if application and application.status == 'approved':
         return True
     return False
+
+def sanitize_input(user_input):
+    # Use bleach to sanitize input
+    cleaned_input = bleach.clean(user_input, tags=[],strip=True).strip()
+    return cleaned_input

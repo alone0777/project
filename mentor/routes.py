@@ -10,12 +10,16 @@ mentor_bp = Blueprint(
 # MENTor get all  public questions and messages route
 @mentor_bp.route('/messages')
 def messages():
+    if not session.get('mentor_login'): # Check if mentor is logged in
+        return redirect(url_for('access_denied'))
     result = get_public_messages()
     expertises=session.get('mentor_expertise').split(',') if session.get('mentor_expertise') else []
     return render_template('messages.html', messages=result, expertises=expertises) 
 
 @mentor_bp.route('/public_messages',methods=['GET'])
 def public_messages():
+    if not session.get('mentor_login'): # Check if mentor is logged in
+        return redirect(url_for('access_denied'))
     is_redirect = request.args.get('from_redirect') == '1'
     if is_redirect:
         expertise = session.get('mentor_expertise_chosen')
@@ -32,6 +36,8 @@ def public_messages():
 
 @mentor_bp.route('/send_message', methods=['POST'])
 def send_message():
+    if not session.get('mentor_login'): # Check if mentor is logged in
+        return redirect(url_for('access_denied'))
     if request.method == 'POST':
         mentor_id = session.get('mentor_id')  # Assuming mentee_id is stored in session
         content = request.form.get('content')
@@ -43,9 +49,16 @@ def send_message():
 # MENTEE profile route
 @mentor_bp.route('/profile')
 def profile():
+    if not session.get('mentor_login'): # Check if mentor is logged in
+        return redirect(url_for('access_denied'))
     result = get_mentor_profile(session.get('mentor_id'))
     return render_template('mentor_profile.html', profile=profile)
 
 @mentor_bp.route('/approval_pending')
 def approval_pending():
-    return render_template('approval_pending.html')     
+    return render_template('approval_pending.html') 
+
+@mentor_bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('signin'))    

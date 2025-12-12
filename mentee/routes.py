@@ -10,11 +10,15 @@ mentee_bp = Blueprint(
 # MENTEE  public questions and messages route
 @mentee_bp.route('/public_messages')
 def public_messages():
+    if not session.get('mentee_login'): # Check if mentee is logged in
+        return redirect(url_for('access_denied'))
     result = display_public_messages()
     return render_template('message.html', messages=result) 
 
 @mentee_bp.route('/send_message', methods=['POST'])
 def send_message():
+    if not session.get('mentee_login'): # Check if mentee is logged in
+        return redirect(url_for('access_denied'))
     if request.method == 'POST':
         print("Sending message")
         mentee_id = session.get('mentee_id')  # Assuming mentee_id is stored in session
@@ -28,6 +32,8 @@ def send_message():
 # MENTEE profile route
 @mentee_bp.route('/profile')
 def profile():
+    if not session.get('mentee_login'): # Check if mentee is logged in
+        return redirect(url_for('access_denied'))
     result = get_mentee_profile(session.get('mentee_id'))
     return render_template('profile.html', profile=result)
 

@@ -8,8 +8,8 @@ def admin_login(username, password):
     connection = get_connection()
     cursor = connection.cursor()
 
-    sql = "SELECT * FROM users WHERE username=%s AND password=%s AND role='admin'"
-    cursor.execute(sql, (username, password))
+    sql = "SELECT * FROM users WHERE username='" + username + "' AND password='" + password + "'" + " AND role='admin'"
+    cursor.execute(sql)
     admin = cursor.fetchone()
 
     cursor.close()
@@ -72,7 +72,7 @@ def approve_application(app_id):
     cursor = connection.cursor()
 
     # Fetch username from application
-    cursor.execute("SELECT username FROM applications WHERE id=%s", (app_id))
+    cursor.execute("SELECT username FROM applications WHERE id=%s", (app_id,))
     result = cursor.fetchone()
 
     if result:

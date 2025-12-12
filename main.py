@@ -51,10 +51,12 @@ def login():
     
     user = User.query.filter_by(username=username, password=password).first()
     if user.role == 'mentee':
+        session['mentee_login'] = True # secure mentee session
         session['mentee_id'] = user.id  # Store mentee_id in session
         print ("Mentee logged in with ID:", user.id)
         return redirect(url_for('mentee.public_messages'))
     elif user.role == 'mentor':
+        session['mentor_login'] = True # secure mentor session
         session['mentor_id'] = user.id  # Store mentor_id in session
         mentor_profile = MentorProfile.query.filter_by(user_id=user.id).first()
         session['mentor_expertise']= mentor_profile.field_of_expertise # Store mentor expertise in session
@@ -64,6 +66,10 @@ def login():
         return redirect(url_for('mentor.approval_pending'))  
     else:
         return "Invalid credentials. Please try again."
+@app.route('/access_denied')
+def access_denied():
+    return render_template('access_denied.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
 

@@ -1,19 +1,11 @@
 import pymysql
 from config.config import get_pymysql_connection as get_connection
-
+from config.model import User
 
 # ADMIN LOGIN
 
 def admin_login(username, password):
-    connection = get_connection()
-    cursor = connection.cursor()
-
-    sql = "SELECT * FROM users WHERE username='" + username + "' AND password='" + password + "'" + " AND role='admin'"
-    cursor.execute(sql)
-    admin = cursor.fetchone()
-
-    cursor.close()
-    connection.close()
+    admin = User.query.filter_by(username=username, password=password, role='admin').first() # replace with raw query to prevent SQL injection
     return admin
 
 

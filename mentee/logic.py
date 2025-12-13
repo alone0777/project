@@ -1,5 +1,6 @@
 import pymysql
-from config.config import get_pymysql_connection as get_connection 
+from config.config import get_pymysql_connection as get_connection, db 
+from config.model import PublicMessages
 
 def display_public_messages():
     connection = get_connection()
@@ -13,15 +14,9 @@ def display_public_messages():
     return messages
 
 def send_public_message(mentee_id, content, interest):
-    connection = get_connection()
-    cursor = connection.cursor()
-
-    sql = "INSERT INTO public_messages (sender_id, content, interest) VALUES (%s, %s,%s)"
-    cursor.execute(sql, (mentee_id, content, interest))
-    connection.commit()
-
-    cursor.close()
-    connection.close()
+    new_message = PublicMessages(sender_id=mentee_id, content=content, interest=interest) # implemneted using ORM to prevent SQL injection
+    db.session.add(new_message)
+    db.session.commit()
 
 def get_mentee_profile(mentee_id):
     connection = get_connection()

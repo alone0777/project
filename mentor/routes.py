@@ -30,7 +30,6 @@ def public_messages():
     expertise = request.args.get('expertise')
     session['mentor_expertise_chosen']=expertise
     result = get_public_messages(expertise)
-    print(result)
     expertises=session.get('mentor_expertise').split(',') if session.get('mentor_expertise') else []
     return render_template('public_messages.html', messages=result, expertises=expertises)
 
@@ -52,8 +51,8 @@ def send_message():
 def profile():
     if not session.get('mentor_login'): # Check if mentor is logged in
         return redirect(url_for('access_denied'))
-    result = get_mentor_profile(session.get('mentor_id'))
-    return render_template('mentor_profile.html', profile=profile)
+    profile = get_mentor_profile(session.get('mentor_id'))
+    return render_template('profile.html', profile=profile)
 
 @mentor_bp.route('/approval_pending')
 def approval_pending():

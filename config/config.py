@@ -1,11 +1,43 @@
 from flask_sqlalchemy import SQLAlchemy
 import pymysql 
 import os 
+import subprocess
+import platform  
 import bleach 
+import time 
 
 def start_mysql_server():
-    # Function to start MySQL server if needed
-    pass    
+    print("Checking MySQL server status...")
+    system_platform = platform.system()
+    if system_platform == 'Windows':
+        check = subprocess.Popen(['sc', 'query', 'MySQL'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if b'RUNNING' not in check.stdout.read():
+            pass
+        else:
+            check = subprocess.Popen(['net', 'start', 'MySQL'])
+            time.sleep(2)  # Wait for a moment to ensure the service starts
+            if check.returncode == 0:
+                print("MySQL server started successfully.")
+    elif system_platform == 'Linux':
+        check = subprocess.Popen(['systemctl', 'is-active', 'mysql'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if b'active' not in check.stdout.read():
+            pass
+        else:
+            subprocess.Popen(['sudo', 'service', 'mysql', 'start'])
+            time.sleep(2)  # Wait for a moment to ensure the service starts
+            if check.returncode == 0:
+                print("MySQL server started successfully.")
+    elif system_platform == 'Darwin':  # macOS
+        check = subprocess.Popen(['brew', 'services', 'list'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if b'mysql' not in check.stdout.read():
+            pass
+        else:
+            check = subprocess.Popen(['brew', 'services', 'start', 'mysql'])
+            time.sleep(2)  # Wait for a moment to ensure the service starts
+            if check.returncode == 0:
+                print("MySQL server started successfully.")
+
+
     
 # SQLAlchemy instance
 db = SQLAlchemy()

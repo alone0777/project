@@ -1,14 +1,18 @@
 from flask import Flask, render_template,request, redirect, url_for, session, flash
 
-from config.config import init_db, create_database_if_not_exists, create_default_admin, add_user , approved  # Initialize database inside config.py
-from config.model import User, Application, MentorProfile, MenteeProfile, PublicMessages # Import models 
+from config.config import init_db, create_database_if_not_exists, create_default_admin, add_user , approved, start_mysql_server   # Initialize database inside config.py
+from config.model import User, Application, MentorProfile, MenteeProfile, PublicMessages# Import models 
 from Admin.routes import admin_bp 
 from mentor.routes import mentor_bp
 from mentee.routes import mentee_bp
 
+start_mysql_server()  # Start MySQL server if not running
+
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'x9F2kL8sD1qP0yT7wR5bZ3vA6nH4mC2p' # secret key for session management , can include in enviroment for more security
+
+
 
 create_database_if_not_exists()  # Create database if it doesn't exist
 
@@ -50,6 +54,9 @@ def login():
     password = request.form.get('password')
     
     user = User.query.filter_by(username=username, password=password).first()
+    if not user:
+        flash("Invalid credentials. Please try again.")
+        return redirect(url_for('signin'))
     if user.role == 'mentee':
         session['mentee_login'] = True # secure mentee session
         session['mentee_id'] = user.id  # Store mentee_id in session
@@ -65,7 +72,8 @@ def login():
             return redirect(url_for('mentor.messages'))
         return redirect(url_for('mentor.approval_pending'))  
     else:
-        return "Invalid credentials. Please try again."
+        flash("Invalid credentials. Please try again.")
+        return redirect(url_for('signin'))
 @app.route('/access_denied')
 def access_denied():
     return render_template('access_denied.html')

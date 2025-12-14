@@ -22,7 +22,7 @@ def get_mentor_profile(mentor_id):
     connection = get_connection()
     cursor = connection.cursor(pymysql.cursors.DictCursor)
 
-    sql = "SELECT * FROM mentor_profiles WHERE user_id = %s"
+    sql = "SELECT name, field_of_expertise FROM mentor_profiles WHERE user_id = %s"
     cursor.execute(sql, (mentor_id))
     profile = cursor.fetchone()
 

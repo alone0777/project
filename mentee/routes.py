@@ -36,7 +36,8 @@ def profile():
     if not session.get('mentee_login'): # Check if mentee is logged in
         return redirect(url_for('access_denied'))
     result = get_mentee_profile(session.get('mentee_id'))
-    return render_template('profile.html', profile=result)
+    print(result)
+    return render_template('profille.html', profile=result)
 
 @mentee_bp.route('/logout')
 def logout():

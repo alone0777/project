@@ -5,7 +5,7 @@ from config.model import User
 # ADMIN LOGIN
 
 def admin_login(username, password):
-    admin = User.query.filter_by(username=username, password=password, role='admin').first() # replace with raw query to prevent SQL injection
+    admin = User.query.filter_by(username=username, password=password, role='admin').first() # replace with raw query to pre
     return admin
 
 

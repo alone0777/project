@@ -5,6 +5,7 @@ from config.model import User, Application, MentorProfile, MenteeProfile, Public
 from Admin.routes import admin_bp 
 from mentor.routes import mentor_bp
 from mentee.routes import mentee_bp
+from datetime import timedelta
 
 start_mysql_server()  # Start MySQL server if not running
 
@@ -12,6 +13,10 @@ start_mysql_server()  # Start MySQL server if not running
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'x9F2kL8sD1qP0yT7wR5bZ3vA6nH4mC2p' # secret key for session management , can include in enviroment for more security
 
+app.config['SESSION_COOKIE_SECURE'] = True      # Production: HTTPS only
+app.config['SESSION_COOKIE_HTTPONLY'] = True    # Prevent XSS
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'   # Prevent CSRF
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2) # Session lifetime
 
 
 create_database_if_not_exists()  # Create database if it doesn't exist
@@ -79,6 +84,6 @@ def access_denied():
     return render_template('access_denied.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(ssl_context='adhoc' , debug=False)
 
 

@@ -1,6 +1,6 @@
 from flask import Flask, render_template,request, redirect, url_for, session, flash
 
-from config.config import init_db, create_database_if_not_exists, create_default_admin, add_user , approved, start_mysql_server   # Initialize database inside config.py
+from config.config import init_db, create_database_if_not_exists, create_default_admin, add_user , approved, start_mysql_server , create_database_user   # Initialize database inside config.py
 from config.model import User, Application, MentorProfile, MenteeProfile, PublicMessages# Import models 
 from Admin.routes import admin_bp 
 from mentor.routes import mentor_bp
@@ -8,6 +8,8 @@ from mentee.routes import mentee_bp
 from datetime import timedelta
 
 start_mysql_server()  # Start MySQL server if not running
+
+create_database_user()  # Create database user if not exists
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -20,6 +22,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2) # Session lifetime
 
 
 create_database_if_not_exists()  # Create database if it doesn't exist
+
 
 db = init_db(app) # Initialize database
 

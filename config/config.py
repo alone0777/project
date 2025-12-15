@@ -38,6 +38,37 @@ def start_mysql_server():
                 print("MySQL server started successfully.")
 
 
+
+def create_database_user(host='localhost'):
+    """Create a MySQL user with all privileges on mentor_mentee_db database."""
+    conn = pymysql.connect(
+        host='localhost',
+        user='root',
+        password=''  # Change this if your root user has a password
+    )
+    username = 'mentor_mentee_user'
+    password = 'SecurePass123!123'  # Change this!
+    cursor = conn.cursor()
+    
+    cursor.execute(f"SELECT User FROM mysql.user WHERE User = '{username}' AND Host = '{host}'")
+    if cursor.fetchone():
+        print(f"User '{username}'@'{host}' already exists!")
+        cursor.close()
+        conn.close()
+        return
+    # Create user
+    cursor.execute(f"CREATE USER '{username}'@'{host}' IDENTIFIED BY '{password}'")
+    
+    # Grant all privileges on mentor_mentee_db database
+    cursor.execute(f"GRANT ALL PRIVILEGES ON mentor_mentee_db.* TO '{username}'@'{host}'")
+    
+    # Apply changes
+    cursor.execute("FLUSH PRIVILEGES")
+    
+    cursor.close()
+    conn.close()
+    
+    print(f"User '{username}' created successfully!")
     
 # SQLAlchemy instance
 db = SQLAlchemy()
@@ -45,8 +76,8 @@ db = SQLAlchemy()
 def create_database_if_not_exists(): # Create database if it doesn't exist
     connection = pymysql.connect(
         host='localhost',
-        user='root',
-        password='',
+        user='mentor_mentee_user',
+        password='SecurePass123!123',
         cursorclass=pymysql.cursors.DictCursor
     )
 
@@ -57,7 +88,7 @@ def create_database_if_not_exists(): # Create database if it doesn't exist
     
 # Initialize database
 def init_db(app):
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/mentor_mentee_db' #  i have to create database before running this line or i will os module for this, otherise it will through error 
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://mentor_mentee_user:SecurePass123!123@localhost/mentor_mentee_db' #  i have to create database before running this line or i will os module for this, otherise it will through error 
     db.init_app(app)
     return db
 
@@ -65,8 +96,8 @@ def init_db(app):
 def get_pymysql_connection():
     return pymysql.connect(
         host='localhost',
-        user='root',
-        password='',
+        user='mentor_mentee_user',
+        password='SecurePass123!123',
         db='mentor_mentee_db',
         cursorclass=pymysql.cursors.DictCursor
     )

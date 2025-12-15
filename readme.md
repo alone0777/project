@@ -20,40 +20,42 @@ Cross-Site Scripting (XSS) Mitigation using input sanitisation (bleach) and safe
 Secure Session Management using Flask sessions
 Static Application Security Testing (SAST) using Bandit
 
-# Project Structure
+## Project Structure
+
+```text
 project/
-│
 ├── Admin/
-│   ├──__init__.py             # used for to make the folder a package and to import in main.py
-│   ├──templates/
-│       └── *.html             # Jinja2 templates for admin
-│   ├── routes.py              # Admin-related routes and access controls
-│   └── logic.py               # Admin logic defined
+│   ├── __init__.py          # Marks Admin as a package
+│   ├── routes.py            # Admin-related routes and access control
+│   ├── logic.py             # Admin business logic
+│   └── templates/
+│       └── *.html           # Jinja2 templates for admin views
 │
 ├── mentor/
-│   ├──__init__.py             # used for to make the folder a package and to import in main.py
-│   ├──templates/
-│       └── *.html             # Jinja2 templates for mentor
-│   ├── routes.py              # Mentor routes
-│   └── logic.py               # Mentor business logic
+│   ├── __init__.py          # Mentor package initialization
+│   ├── routes.py            # Mentor routes
+│   ├── logic.py             # Mentor business logic
+│   └── templates/
+│       └── *.html           # Mentor templates
 │
 ├── mentee/
-│   ├──__init__.py             # used for to make the folder a package and to import in main.py
-│   ├──templates/
-│       └── *.html             # Jinja2 templates for mentee   
-│   ├── routes.py              # Mentee routes and message handling
-│   └── logic.py               # Mentee business logic
+│   ├── __init__.py          # Mentee package initialization
+│   ├── routes.py            # Mentee routes and message handling
+│   ├── logic.py             # Mentee business logic
+│   └── templates/
+│       └── *.html           # Mentee templates
 │
 ├── config/
-│   ├── config.py              # Database setup, SQLAlchemy init, security helpers
-│   └── model.py               # SQLAlchemy models (User, Profiles, Messages)
+│   ├── config.py            # Database setup, SQLAlchemy init, security helpers
+│   └── model.py             # SQLAlchemy models (User, Profiles, Messages)
 │
 ├── templates/
-│   └── *.html                 # Jinja2 templates 
+│   └── *.html               # Shared Jinja2 templates
 │
-├── main.py                    # Application entry point
-├── requirements.txt           # Python dependencies
-└── README.md                  # Project documentation
+├── main.py                  # Application entry point
+├── requirements.txt         # Python dependencies
+└── README.md                # Project documentation
+```
 
 # Setup and Installation Instructions
 
